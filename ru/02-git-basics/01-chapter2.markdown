@@ -70,7 +70,7 @@ You have a bona fide Git repository and a checkout or working copy of the files 
 
 Remember that each file in your working directory can be in one of two states: tracked or untracked. Tracked files are files that were in the last snapshot; they can be unmodified, modified, or staged. Untracked files are everything else - any files in your working directory that were not in your last snapshot and are not in your staging area.  When you first clone a repository, all of your files will be tracked and unmodified because you just checked them out and haven’t edited anything. 
 
-Как только вы отредактируете файлы, Git будет рассматривать их как измененные, т.к. вы изменили их с момента последнего коммита. Вы индексируете (stage) эти изменения и затем фиксируете все индексированные изменения, а затем цикл повторяется. Этот жизненный цикл изображен на рисунке 2-1.
+Как только вы отредактируете файлы, Git будет рассматривать их как измененные, т.к. вы изменили их с момента последнего коммита. Вы подготавливаете (stage) эти изменения и затем фиксируете все подготовленные изменения, а затем цикл повторяется. Этот жизненный цикл изображен на рисунке 2-1.
 
 As you edit files, Git sees them as modified, because you’ve changed them since your last commit. You stage these modified files and then commit all your staged changes, and the cycle repeats. This lifecycle is illustrated in Figure 2-1.
 
@@ -106,7 +106,7 @@ Let’s say you add a new file to your project, a simple README file. If the fil
 	#	README
 	nothing added to commit but untracked files present (use "git add" to track)
 
-Вы можете видеть, что ваш новый файл README неотслеживаемый, т.к. он находится в секции “Untracked files” в выводе команды status. Неотслеживаемый файл обычно означает, что Git нашел файл отсутствующий в предыдущем снимке состояния (коммите); Git не станет добавлять его в ваши коммиты, пока вы явно это ему не укажете. Это предохраняет вас от случайного добавления в репозиторий сгенерированных двоичных файлов или каких-либо других, которые вы и не думали добавлять. Вы хотите добавить README, так что давайте сделаем это.
+Вы можете видеть, что ваш новый файл README неотслеживаемый, т.к. он находится в секции “Untracked files” в выводе команды status. Неотслеживаемый файл обычно означает, что Git нашел файл отсутствующий в предыдущем снимке состояния (коммите); Git не станет добавлять его в ваши коммиты, пока вы явно это ему не укажете. Это предохраняет вас от случайного добавления в репозиторий сгенерированных двоичных файлов или каких-либо других, которые вы и не думали добавлять. Вы хотите чтобы README стал отслеживаемым, так давайте сделаем это.
 
 You can see that your new README file is untracked, because it’s under the “Untracked files” heading in your status output. Untracked basically means that Git sees a file you didn’t have in the previous snapshot (commit); Git won’t start including it in your commit snapshots until you explicitly tell it to do so. It does this so you don’t accidentally begin including generated binary files or other files that you did not mean to include. You do want to start including README, so let’s start tracking the file.
 
@@ -131,7 +131,7 @@ If you run your status command again, you can see that your README file is now t
 	#	new file:   README
 	#
 
-Вы можете видеть что файл проиндексирован по тому, что он находится в секции “Changes to be committed”. Если вы выполните коммит в этот момент, то версия файла, существовавшая на момент выполнения вами команды git add, будет добавлена в историю снимков состояния. Вы помните, что когда вы ранее выполнили git init, вы затем выполнили git add (files) - это было сделано для того, чтобы добавить файлы в вашем каталоге под версионный контроль. Команда git add принимает параметром путь к файлу или каталогу, если это каталог, команда рекурсивно добавляет (индексирует) все файлы в данном каталоге.
+Вы можете видеть что файл проиндексирован, потому что он находится в секции “Changes to be committed”. Если вы выполните коммит в этот момент, то версия файла, существовавшая на момент выполнения вами команды git add, будет добавлена в историю снимков состояния. Вы помните, что когда вы ранее выполнили git init, вы затем выполнили git add (files) - это было сделано для того, чтобы добавить файлы в вашем каталоге под версионный контроль. Команда git add принимает параметром путь к файлу или каталогу, если это каталог, команда рекурсивно добавляет (индексирует) все файлы в данном каталоге.
 
 You can tell that it’s staged because it’s under the “Changes to be committed” heading. If you commit at this point, the version of the file at the time you ran git add is what will be in the historical snapshot. You may recall that when you ran git init earlier, you then ran git add (files) — that was to begin tracking files in your directory. The git add command takes a path name for either a file or a directory; if it’s a directory, the command adds all the files in that directory recursively.
 
@@ -231,7 +231,7 @@ The rules for the patterns you can put in the .gitignore file are as follows:
 *	You can end patterns with a forward slash (`/`) to specify a directory.
 *	You can negate a pattern by starting it with an exclamation point (`!`).
 
-Glob шаблоны представляют собой упрощенные регулярные выражения используемые командными интерпретаторами. Символ `*` соответствует 0 или более любых символов; последовательность `[abc]` - любому символу из указанных в скобках (в данном примере a, b или c); знак вопроса (`?`) соответствует любому одному символу; `[0-9]` - соответствует любому символу из интервала (в данном случае от 0 до 9).
+Glob шаблоны представляют собой упрощенные регулярные выражения, используемые командными интерпретаторами. Символ `*` соответствует 0 или более любых символов; последовательность `[abc]` - любому символу из указанных в скобках (в данном примере a, b или c); знак вопроса (`?`) соответствует любому одному символу; `[0-9]` - соответствует любому символу из интервала (в данном случае от 0 до 9).
 
 Glob patterns are like simplified regular expressions that shells use. An asterisk (`*`) matches zero or more characters; `[abc]` matches any character inside the brackets (in this case a, b, or c); a question mark (`?`) matches a single character; and brackets enclosing characters separated by a hyphen(`[0-9]`) matches any character between them (in this case 0 through 9) . 
 
@@ -550,7 +550,7 @@ However, this is equivalent to running something like this:
 	$ git rm README.txt
 	$ git add README
 
-Git неявно определяет, что было переименование, поэтому не важно переименуете вы файл так или используя команду `mv`. Единственное отличие состоит лишь в том, что `mv` это одна команда вместо трех — это <convenience function>. Важнее другое — вы можете использовать любой способ/программу чтобы переименовать файл, и затем перед коммитом выполнить add/rm.
+Git неявно определяет, что было переименование, поэтому не важно переименуете вы файл так или используя команду `mv`. Единственное отличие состоит лишь в том, что `mv` это одна команда вместо трех — эта функция создана для удобства. Важнее другое — вы можете использовать любой способ, чтобы переименовать файл, и затем перед коммитом выполнить add/rm.
 
 Git figures out that it’s a rename implicitly, so it doesn’t matter if you rename a file that way or with the `mv` command. The only real difference is that `mv` is one command instead of three — it’s a convenience function. More important, you can use any tool you like to rename a file, and address the add/rm later, before you commit.
 
@@ -734,11 +734,11 @@ Table 2-1 lists some of the more useful options that format takes.
 	%cr	Committer date, relative
 	%s	Subject
 
-Вы может быть интересно в чем же разница между _автором_ и _коммиттером_. Автор — это человек, изначально сделавший работу, тогда как коммиттер — это человек, который последним применил эту работу. Так что если вы послали патч(заплатку) в проект и один из основных разработчиков применил этот патч, вы оба не будете забыты — вы как автор а разработчик как коммиттер. Мы чуть подробнее рассмотрим это различие в Главе 5.
+Вы может быть интересно в чем же разница между _автором_ и _коммиттером_. Автор — это человек, изначально сделавший работу, тогда как коммиттер — это человек, который внес вклад в эту работу. Так что если вы послали патч(заплатку) в проект и один из основных разработчиков применил этот патч, вы оба не будете забыты — вы как автор, а разработчик как коммиттер. Мы чуть подробнее рассмотрим это различие в Главе 5.
 
 You may be wondering what the difference is between _author_ and _committer_. The author is the person who originally wrote the work, whereas the committer is the person who last applied the work. So, if you send in a patch to a project and one of the core members applies the patch, both of you get credit — you as the author and the core member as the committer. We’ll cover this distinction a bit more in Chapter 5.
 
-Параметры oneline и format также полезны с другим параметром команды `log` — `--graph`. Этот параметр добавляет миленький ASCII граф показывающий вашу ветку и историю слияний, **which we can see our copy of the Grit project repository**:
+Параметры oneline и format также полезны с другим параметром команды `log` — `--graph`. Этот параметр добавляет миленький ASCII граф показывающий вашу ветку и историю слияний, на котором мы можем видеть нашу копию репозитория проекта Grit:
 
 The oneline and format options are particularly useful with another `log` option called `--graph`. This option adds a nice little ASCII graph showing your branch and merge history, which we can see our copy of the Grit project repository:
 
@@ -754,7 +754,7 @@ The oneline and format options are particularly useful with another `log` option
 	* d6016bc require time for xmlschema
 	*  11d191e Merge branch 'defunkt' into local
 
-Мы рассмотрели только самые простые параметры форматирования вывода для `git log` — их гораздо больше. Таблица 2-2 содержит как параметры уже рассмотренные нами так и другие могущие быть полезными параметры, вместе с описанием эффекта от их использования.
+Мы рассмотрели только самые простые параметры форматирования вывода для `git log` — их гораздо больше. Таблица 2-2 содержит параметры как уже рассмотренные нами, так и другие, который могут быть полезными, вместе с описанием эффекта от их использования.
 
 	Параметр	Описание
 	-p	Выводит патч(заплатку/diff) внесенный каждым коммитом.
@@ -1013,7 +1013,7 @@ If you have more than one remote, the command lists them all. For example, my Gr
 	koke      git://github.com/koke/grit.git
 	origin    git@github.com:mojombo/grit.git
 
-Это означает, что мы легко можем получить изменения от любого из этих пользователей. Но, заметьте, что origin — это единственный удалённый сервер прописанный как SSH ссылка, поэтому он единственный, в который я могу помещать изменения (это будет рассмотрено в Главе 4).
+Это означает, что мы легко можем получить изменения от любого из этих пользователей. Но, заметьте, что origin — это единственный удалённый сервер, представленный в виде SSH адреса, поэтому он является единственным сервером, куда я могу помещать изменения (почему это так будет рассмотрено в Главе 4).
 
 This means we can pull contributions from any of these users pretty easily. But notice that only the origin remote is an SSH URL, so it’s the only one I can push to (we’ll cover why this is in Chapter 4).
 
@@ -1031,7 +1031,7 @@ I’ve mentioned and given some demonstrations of adding remote repositories in 
 	origin	git://github.com/schacon/ticgit.git
 	pb	git://github.com/paulboone/ticgit.git
 
-Теперь вы можете использовать в командной строке строку pb вместо полного URL. Например, если вы хотите извлечь (fetch) всю информацию, которая есть в репозитории Павла, но нет в вашем, вы можете выполнить git fetch pb: 
+Теперь вы можете использовать в командной строке строку pb вместо полного URL. Например, если вы хотите извлечь (fetch) всю информацию, которая есть в репозитории Пола, но нет в вашем, вы можете выполнить git fetch pb: 
 
 Now you can use the string pb on the command line in lieu of the whole URL. For example, if you want to fetch all the information that Paul has but that you don’t yet have in your repository, you can run git fetch pb:
 
@@ -1044,7 +1044,7 @@ Now you can use the string pb on the command line in lieu of the whole URL. For 
 	 * [new branch]      master     -> pb/master
 	 * [new branch]      ticgit     -> pb/ticgit
 
-Ветка master Павла теперь доступна локально как `pb/master`. Вы можете слить (merge) её в одну из ваших веток, или сейчас вы можете перейти на эту ветку если вы хотите её просмотреть.
+Ветка master Пола теперь доступна локально как `pb/master`. Вы можете слить (merge) её в одну из ваших веток, или сейчас вы можете перейти на эту ветку, если вы хотите её просмотреть.
 
 Paul’s master branch is accessible locally as `pb/master` — you can merge it into one of your branches, or you can check out a local branch at that point if you want to inspect it.
 
@@ -1102,7 +1102,7 @@ If you want to see more information about a particular remote, you can use the `
 
 It lists the URL for the remote repository as well as the tracking branch information. The command helpfully tells you that if you’re on the master branch and you run `git pull`, it will automatically merge in the master branch on the remote after it fetches all the remote references. It also lists all the remote references it has pulled down.
 
-Это был пример для простой ситуации, и наверняка вы встретились с чем-то подобным. Однако, если вы используете Git более интенсивно, вы можете увидеть гораздо большее количество информации от `git remote show`:
+Это был пример для простой ситуации, с которой вы наверняка встретитесь. Однако, если вы используете Git более интенсивно, вы можете увидеть гораздо большее количество информации от `git remote show`:
 
 That is a simple example you’re likely to encounter. When you’re using Git more heavily, however, you may see much more information from `git remote show`:
 
@@ -1144,7 +1144,7 @@ If you want to rename a reference, in newer versions of Git you can run `git rem
 	origin
 	paul
 
-Стоит упомянуть, что это также изменяет для вас имена удалённых веток. То, к чему вы обращались как `pb/master`, стало `paul/master`.
+Стоит упомянуть, что это также изменит для вас имена удалённых веток. То, к чему вы обращались как `pb/master`, стало `paul/master`.
 
 It’s worth mentioning that this changes your remote branch names, too. What used to be referenced at `pb/master` is now at `paul/master`.
 
@@ -1180,11 +1180,11 @@ If you want to remove a reference for some reason — you’ve moved the server 
 
 ### Создание тегов ###
 
-Git использует два основных типа тегов: легковесные и аннотированные. Легковесные теги очень похож на ветку (branch), который не изменяется - это просто указатель на конкретный коммит. Аннотированные теги, однако, хранятся как стандартные объекты в базе данных Git. Они имеют контрольную сумму, имеют автора, адрес его электронной почты, а также дату; имеют сообщение коммита, и могут быть подписаны и проверены с GNU Privacy Guard (GPG). Обычно рекомендуется создать аннотированные теги, чтобы вы могли иметь всю эту информацию, но если вы хотите создать временный тег или по какой-то причине не хотите сохранять другую информацию, вам необходимо использовать легковесные теги.
+Git использует два основных типа тегов: легковесные и аннотированные. Легковесные теги очень похожи на ветку (branch), которая не изменяется - это просто указатель на конкретный коммит. Аннотированные теги, однако, хранятся как стандартные объекты в базе данных Git. Они имеют контрольную сумму, имеют автора, адрес его электронной почты, а также дату; имеют сообщение коммита, и могут быть подписаны и проверены с GNU Privacy Guard (GPG). Обычно рекомендуется создать аннотированные теги, чтобы вы могли иметь всю эту информацию, но если вы хотите создать временный тег или по какой-то причине не хотите сохранять другую информацию, вам необходимо использовать легковесные теги.
 
 ### Аннотированные теги ###
 
-Creating an annotated tag in Git is simple. The easiest way is to specify `-a` when you run the `tag` command:
+Создать аннотированный тег в Git довольно просто. Самый простой способ заключается в указании ключа `-a` при запуске команды `tag`:
 
 	$ git tag -a v1.4 -m 'my version 1.4'
 	$ git tag
@@ -1192,9 +1192,9 @@ Creating an annotated tag in Git is simple. The easiest way is to specify `-a` w
 	v1.3
 	v1.4
 
-The `-m` specifies a tagging message, which is stored with the tag. If you don’t specify a message for an annotated tag, Git launches your editor so you can type it in.
+Ключ `-m` задает сообщение для тега, которое сохраняется вместе с этим тегом. Если вы не хотите указывать сообщение для аннотированного тега в консоли, то, не указывая ключ `-m`, Git запутит редактор, где вы сможете написать свой комментарий.
 
-You can see the tag data along with the commit that was tagged by using the `git show` command:
+Вы можете просмотреть данные тега вместе с информацией о коммите, на который указывает этот тег, используя команду `git show`:
 
 	$ git show v1.4
 	tag v1.4
@@ -1209,18 +1209,20 @@ You can see the tag data along with the commit that was tagged by using the `git
 
 	    Merge branch 'experiment'
 
+Здесь мы видим информацию о теге, дату коммита, а также краткое сообщение перед информацией о самом коммите.
 That shows the tagger information, the date the commit was tagged, and the annotation message before showing the commit information.
 
 ### Подписывание тегов ###
 
-You can also sign your tags with GPG, assuming you have a private key. All you have to do is use `-s` instead of `-a`:
+Вы также можете подписывать ваши теги при помощи GPG, этот процесс предполагает наличие личного ключа. Все что вам нужно сделать - это
+использовать ключ `-s` вместо `-a`:
 
 	$ git tag -s v1.5 -m 'my signed 1.5 tag'
 	You need a passphrase to unlock the secret key for
 	user: "Scott Chacon <schacon@gee-mail.com>"
 	1024-bit DSA key, ID F721C45A, created 2009-02-09
 
-If you run `git show` on that tag, you can see your GPG signature attached to it:
+Если вы запустите команду `git show` применительно к этом тегу, то вы увидите прикрепленную к нему GPG сигнатуру:
 
 	$ git show v1.5
 	tag v1.5
@@ -1242,7 +1244,7 @@ If you run `git show` on that tag, you can see your GPG signature attached to it
 
 	    Merge branch 'experiment'
 
-A bit later, you’ll learn how to verify signed tags.
+Чуть позже вы научитесь проверять подписанные теги.
 
 ### Легковесные теги ###
 
@@ -1268,7 +1270,8 @@ A bit later, you’ll learn how to verify signed tags.
 
 ### Проверка тегов ###
 
-To verify a signed tag, you use `git tag -v [tag-name]`. This command uses GPG to verify the signature. You need the signer’s public key in your keyring for this to work properly:
+Для проверки подписанного тега используйте команду `git tag -v [tag-name]`. Эта команда использует GPG для проверки сигнатуры. Для корректной
+работы в вашем брелке (keyring) должен быть открытый ключ подписчика:
 
 	$ git tag -v v1.4.2.1
 	object 883653babd8ee7ea23e6a5c392bb739348b1eb61
@@ -1284,15 +1287,16 @@ To verify a signed tag, you use `git tag -v [tag-name]`. This command uses GPG t
 	gpg:                 aka "[jpeg image of size 1513]"
 	Primary key fingerprint: 3565 2A26 2040 E066 C9A7  4A7D C0C6 D9A4 F311 9B9A
 
-If you don’t have the signer’s public key, you get something like this instead:
+Если у вас нет открытого ключа подписчика, тогда вы получите сообщение вроде этого:
 
 	gpg: Signature made Wed Sep 13 02:08:25 2006 PDT using DSA key ID F3119B9A
 	gpg: Can't check signature: public key not found
 	error: could not verify the tag 'v1.4.2.1'
 
-### Tagging Later ###
+### Позднее тегирование ###
 
-You can also tag commits after you’ve moved past them. Suppose your commit history looks like this:
+Вы также можете указывать теги к коммитам, которые уже были зафиксированы. Предположим, что ваша история
+коммитов выглядит следующим образом:
 
 	$ git log --pretty=oneline
 	15027957951b64cf874c3557a0f3547bd83b3ff6 Merge branch 'experiment'
@@ -1306,11 +1310,12 @@ You can also tag commits after you’ve moved past them. Suppose your commit his
 	964f16d36dfccde844893cac5b347e7b3d44abbc commit the todo
 	8a5cbc430f1a9c3d00faaeffd07798508422908a updated readme
 
-Now, suppose you forgot to tag the project at v1.2, which was at the "updated rakefile" commit. You can add it after the fact. To tag that commit, you specify the commit checksum (or part of it) at the end of the command:
+Теперь предположим, что вы забыли указать для проекта тег v1.2, который надо было бы сделать для коммита "update rakefile" (обновленный rakefile).
+Вы можете сделать это постфактум. Для этого вам нужно добавить контрольную сумму (или ее часть) коммита в конце команды:
 
 	$ git tag -a v1.2 9fceb02
 
-You can see that you’ve tagged the commit:
+Вы можете видеть, что добавили тег к коммиту:
 
 	$ git tag 
 	v0.1
@@ -1333,9 +1338,11 @@ You can see that you’ve tagged the commit:
 	    updated rakefile
 	...
 
-### Sharing Tags ###
+### Передача тегов ###
 
-By default, the `git push` command doesn’t transfer tags to remote servers. You will have to explicitly push tags to a shared server after you have created them.  This process is just like sharing remote branches – you can run `git push origin [tagname]`.
+По умолчанию, команда `git push` не передает теги удаленным серверам. Вы должны явным образом отправить теги общедоступному серверу после того, как
+вы их создали. Этот процесс похож на передачу удаленных веток - вы можете выполнить команду `git push origin [tagname]`.
+
 
 	$ git push origin v1.5
 	Counting objects: 50, done.
@@ -1345,7 +1352,8 @@ By default, the `git push` command doesn’t transfer tags to remote servers. Yo
 	To git@github.com:schacon/simplegit.git
 	* [new tag]         v1.5 -> v1.5
 
-If you have a lot of tags that you want to push up at once, you can also use the `--tags` option to the `git push` command.  This will transfer all of your tags to the remote server that are not already there.
+Если у вас имеется множество тегов для передачи за один раз, вы можете воспользоваться опцией `--tags` команды `git push`. Это позволит
+передать все ваши теги удаленному серверу, которые еще не были переданы.
 
 	$ git push origin --tags
 	Counting objects: 50, done.
@@ -1359,61 +1367,71 @@ If you have a lot of tags that you want to push up at once, you can also use the
 	 * [new tag]         v1.4-lw -> v1.4-lw
 	 * [new tag]         v1.5 -> v1.5
 
-Now, when someone else clones or pulls from your repository, they will get all your tags as well.
+Теперь когда кто-нибудь будет клонировать репозиторий либо извлекать изменения, он также получит все ваши теги.
 
-## Tips and Tricks ##
+## Советы и трюки ##
 
-Before we finish this chapter on basic Git, a few little tips and tricks may make your Git experience a bit simpler, easier, or more familiar. Many people use Git without using any of these tips, and we won’t refer to them or assume you’ve used them later in the book; but you should probably know how to do them.
+Прежде чем мы закончим эту главу по основам Git, расскажу о нескольких советах и трюках, которые сделают вашу работу с Git проще, легче и понятнее.
+Многие люди работают с Git, не используя какие-либо из этих советов, и мы не будем ссылаться на них или предположим, что вы воспользуетесь этими
+советами в дальнейшем; но вы, вероятно, должны знать об этом.
 
-### Auto-Completion ###
+### Автодополнение ###
 
-If you use the Bash shell, Git comes with a nice auto-completion script you can enable. Download the Git source code, and look in the `contrib/completion` directory; there should be a file called `git-completion.bash`. Copy this file to your home directory, and add this to your `.bashrc` file:
+Если вы используете шел Bash, то вы можете воспользоваться хорошим скриптом для автодополнения, который поставляется вместе с Git.
+Скачайте исходный код Git, и загляните в папку `contrib/completion`; там должен быть файл под названием `git-completion.bash`. Скопируйте
+этот файл в свой домашний каталог, и добавьте следующее в свой файл `.bashrc`:
 
 	source ~/.git-completion.bash
 
-If you want to set up Git to automatically have Bash shell completion for all users, copy this script to the `/opt/local/etc/bash_completion.d` directory on Mac systems or to the `/etc/bash_completion.d/` directory on Linux systems. This is a directory of scripts that Bash will automatically load to provide shell completions.
+Если вы хотите установить Git с использованием автодополнения шела Bash для всех пользователей, скопируйте скрипт в каталог `/opt/local/etc/bash_completion.d` на Mac системах либо в каталог `/etc/bash_completion.d/` на Linux системах. Эта папка скриптов, которые Bash автоматически
+загружает для обеспечение дополнений в шеле.
 
-If you’re using Windows with Git Bash, which is the default when installing Git on Windows with msysGit, auto-completion should be preconfigured.
+Если вы используете Windows совместно с Bash'ем Git, который ставится по-умолчанию при установке Git на Windows при помощи msysGit, тогда
+автодополнение должно быть сначало сконфигурировано.
 
-Press the Tab key when you’re writing a Git command, and it should return a set of suggestions for you to pick from:
+Нажмите клавишу Tab во время написания команды Git, и вы увидите список предложений для выбора:
 
 	$ git co<tab><tab>
 	commit config
 
-In this case, typing git co and then pressing the Tab key twice suggests commit and config. Adding `m<tab>` completes `git commit` automatically.
-	
-This also works with options, which is probably more useful. For instance, if you’re running a `git log` command and can’t remember one of the options, you can start typing it and press Tab to see what matches:
+В случае выше, написание git co, а затем нажатие клавиши Tab дважды, нам выводятся предложения commit и config. Добавление `m<tab>` автоматически
+напечатае `git commit`.
+
+Это также работает и для опций, что, вероятно, является более полезным. Например, если вы наберете команду `git log` и не помните какую-либо из опций, вы можете начать печатать, а затем нажать клавишу Tab для того, чтобы просмотреть какие будут найдены соответствия:
 
 	$ git log --s<tab>
 	--shortstat  --since=  --src-prefix=  --stat   --summary
 
-That’s a pretty nice trick and may save you some time and documentation reading.
+Это довольно полезный трюк, который поможет сэкономить вам время и чтение документации.
 
-### Git Aliases ###
+### Псевдонимы Git ###
 
-Git doesn’t infer your command if you type it in partially. If you don’t want to type the entire text of each of the Git commands, you can easily set up an alias for each command using `git config`. Here are a couple of examples you may want to set up:
+Git не выводит вашу команду, если вы набираете ее частично. Если вы не хотите набирать весь текст каких-либо команд Git, вы можете с легкостью
+установить псевдонимы для любой команды, используя `git config`. Здесь приводится пара примеров, которыми вы, возможно, воспользуетесь:
 
 	$ git config --global alias.co checkout
 	$ git config --global alias.br branch
 	$ git config --global alias.ci commit
 	$ git config --global alias.st status
+	
+Это, например, означает, что вместо того, чтобы набирать `git commit`, вы можете просто набрать `git ci`. По мере использования Git, вы, вероятно,
+будете часто использовать другие команды: в этом случае, не брезгуйте созданием новых псевдонимов.
 
-This means that, for example, instead of typing `git commit`, you just need to type `git ci`. As you go on using Git, you’ll probably use other commands frequently as well; in this case, don’t hesitate to create new aliases.
-
-This technique can also be very useful in creating commands that you think should exist. For example, to correct the usability problem you encountered with unstaging a file, you can add your own unstage alias to Git:
+Эта техника может быть очень полезной для создания команд, которые должны существовать по вашему мнению. Например, чтобы исправить проблем
+с юзабилити, которая встречается при отмене подготовленных файлов, вы можете добавить свой псевдоним Git:
 
 	$ git config --global alias.unstage 'reset HEAD --'
 
-This makes the following two commands equivalent:
+Это делает следующие две команды эквивалентными:
 
 	$ git unstage fileA
 	$ git reset HEAD fileA
 
-This seems a bit clearer. It’s also common to add a `last` command, like this:
+Это выглядит более понятным. Также обычно добавляют команду `last`, например, таким образом:
 
 	$ git config --global alias.last 'log -1 HEAD'
 
-This way, you can see the last commit easily:
+Таким образом вы можете легко просмотреть последний коммит:
 	
 	$ git last
 	commit 66938dae3329c7aebe598c2246a8e6af90d04646
@@ -1424,10 +1442,12 @@ This way, you can see the last commit easily:
 
 	    Signed-off-by: Scott Chacon <schacon@example.com>
 
-As you can tell, Git simply replaces the new command with whatever you alias it for. However, maybe you want to run an external command, rather than a Git subcommand. In that case, you start the command with a `!` character. This is useful if you write your own tools that work with a Git repository. We can demonstrate by aliasing `git visual` to run `gitk`:
+Как вы могли заметить, Git просто заменяет какую-угодно новую команду ее псевдонимом. Однако, возможно, вы захотите запускать внешнюю команду, нежели
+подкоманду Git. В этом случае, вам нужно начать команду с символа `!`. Это бывает полезным, если вы пишите свои инструменты для работы с репозиторием Git. Мы можем продемонстрировать этот случай псевдонимом `git visual` для запуска `gitk`:
 
 	$ git config --global alias.visual "!gitk"
 
-## Summary ##
+## Итоги ##
 
-At this point, you can do all the basic local Git operations — creating or cloning a repository, making changes, staging and committing those changes, and viewing the history of all the changes the repository has been through. Next, we’ll cover Git’s killer feature: its branching model.
+К этому моменту вы можете делать все базовые операции Git — создание или клонирование репозитория, внесение изменения, подготовка и фиксация этих
+изменений, просмотр истории всех изменений в репозитории. Далее мы рассмотрим killer feature (фичу убийцу) Git'а: его модель ветвления.
