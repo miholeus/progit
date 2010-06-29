@@ -239,7 +239,7 @@ Figure 3-12. The iss53 branch has moved forward with your work.
 
 Now you get the call that there is an issue with the web site, and you need to fix it immediately. With Git, you don’t have to deploy your fix along with the `iss53` changes you’ve made, and you don’t have to put a lot of effort into reverting those changes before you can work on applying your fix to what is in production. All you have to do is switch back to your master branch.
 
-Однако, прежде чем сделать это, учтите, что если в вашей рабочей дирректории или области подготовки к коммиту имеются незафиксированные изменения, которые конфликтуют с веткой, на которую вы переходите, Git не позволит переключить брэнчи. Лучше всего иметь чистое рабочее состояния, когда вы переключаете ветки. Существует несколько путей сделать это (а именно, временная фиксайия работы и правка коммита), которые мы рассмотрим позже. А на данный момент представим, что вы зафиксировали все изменения, и можете переключится обратно на ветку master:
+Однако, прежде чем сделать это, учтите, что если в вашей рабочей дирректории или области подготовки к коммиту имеются незафиксированные изменения, которые конфликтуют с веткой, на которую вы переходите, Git не позволит переключить брэнчи. Лучше всего иметь чистое рабочее состояния, когда вы переключаете ветки. Существует несколько путей сделать это (а именно, временная фиксация работы и правка коммита), которые мы рассмотрим позже. А на данный момент представим, что вы зафиксировали все изменения, и можете переключится обратно на ветку master:
 
 However, before you do that, note that if your working directory or staging area has uncommitted changes that conflict with the branch you’re checking out, Git won’t let you switch branches. It’s best to have a clean working state when you switch branches. There are ways to get around this (namely, stashing and commit amending) that we’ll cover later. For now, you’ve committed all your changes, so you can switch back to your master branch:
 
@@ -277,7 +277,7 @@ You can run your tests, make sure the hotfix is what you want, and merge it back
 	 README |    1 -
 	 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Наверное, вы заметили фразу "Fast forward" в этом мерже. Так как бранч, с которымй вы мержитесь, указывает на коммит, являющийся прямым потомком коммита, на котором вы находитесь, Git передвигает указатель вперед. Говоря иными словами, когда вы пытаетесь помержить один коммит с другим, который может быть достигнут путем следованя первичной истории коммитов, Git упрощает вещи перемещением указателя вперед, так как нету расходящихся изменений для слияния их воедино. Это называется "fast forward".
+Наверное, вы заметили фразу "Fast forward" в этом мерже. Так как бранч, с которымй вы мержитесь, указывает на коммит, являющийся прямым потомком коммита, на котором вы находитесь, Git передвигает указатель вперед. Говоря иными словами, когда вы пытаетесь объединить один коммит с другим, который может быть достигнут путем следованя первичной истории коммитов, Git упрощает вещи перемещением указателя вперед, так как нету расходящихся изменений для слияния их воедино. Это называется "fast forward".
 
 You’ll notice the phrase "Fast forward" in that merge. Because the commit pointed to by the branch you merged in was directly upstream of the commit you’re on, Git moves the pointer forward. To phrase that another way, when you try to merge one commit with a commit that can be reached by following the first commit’s history, Git simplifies things by moving the pointer forward because there is no divergent work to merge together — this is called a "fast forward".
 
@@ -317,8 +317,12 @@ Figure 3-15. Your iss53 branch can move forward independently.
 
 It’s worth noting here that the work you did in your `hotfix` branch is not contained in the files in your `iss53` branch. If you need to pull it in, you can merge your `master` branch into your `iss53` branch by running `git merge master`, or you can wait to integrate those changes until you decide to pull the `iss53` branch back into `master` later.
 
-### Основы мержа ###
+### Основы слияния ###
 ### Basic Merging ###
+
+Предположим, что вы решили, что работа над проблемой #53 закончена и ее нужно объединить с `master` веткой. Для того чтобы сделать это, вам нужно сделать слияние
+в ветке `iss53`, это похоже на то, как вы раньше делали слияние ветки `hotfix`. Все что вам нужно это перейти на ветку, которую вы хотите объединить, и выполнить
+команду `git merge`:
 
 Suppose you’ve decided that your issue #53 work is complete and ready to be merged into your `master` branch. In order to do that, you’ll merge in your `iss53` branch, much like you merged in your `hotfix` branch earlier. All you have to do is check out the branch you wish to merge into and then run the `git merge` command:
 
@@ -327,18 +331,35 @@ Suppose you’ve decided that your issue #53 work is complete and ready to be me
 	Merge made by recursive.
 	 README |    1 +
 	 1 files changed, 1 insertions(+), 0 deletions(-)
+	 
+Это немного отличается от слияния ветки `hotfix`, которое вы делали ранее. В этом случае ваша история разработки отклоняется от некой старой точки. Из-за того что ветвь, на которой вы находитесь не является прямым предком ветви, которую вы мержите, то Git должен выполнить некоторую работу. В этом случае Git выполняет
+простое трехуровневое слияние, используя для этого два снэпшота, указывающих на каждую из ветвей, и общего предка этих ветвей. На рисунке 3-16 выделены три
+снэпшота, которые Git использует для выполнения слияния в этом случае.
 
 This looks a bit different than the `hotfix` merge you did earlier. In this case, your development history has diverged from some older point. Because the commit on the branch you’re on isn’t a direct ancestor of the branch you’re merging in, Git has to do some work. In this case, Git does a simple three-way merge, using the two snapshots pointed to by the branch tips and the common ancestor of the two. Figure 3-16 highlights the three snapshots that Git uses to do its merge in this case.
 
 Insert 18333fig0316.png 
+Рисунок 3-16. Git автоматически определяет наиболее подходящего предка в качестве основы для слияния ветки.
+
 Figure 3-16. Git automatically identifies the best common-ancestor merge base for branch merging.
 
+Вместо того чтобы просто передвинуть указатель вперед, Git создает новый снэпшот, который является результатом трехуровнего слияния и создает автоматически новый
+коммит, указывающий на него (смотрите Рисунок 3-17). Кажется, что это обычное слияние, но особенность в том, что у него более одного предка.
+
 Instead of just moving the branch pointer forward, Git creates a new snapshot that results from this three-way merge and automatically creates a new commit that points to it (see Figure 3-17). This is referred to as a merge commit and is special in that it has more than one parent.
+
+Стоит отметить, что Git определяет наиболее подходящего предка, чтобы использовать его в качестве основы для слияния; это поведение отличается от CVS или
+Subversion (до версии 1.5), где разработчик, делая слияние, должен выяснить самостоятельно наиболее подходящего предка. Это делает слияние в Git чертовски
+более легким, чем в этих указанных системах.
 
 It’s worth pointing out that Git determines the best common ancestor to use for its merge base; this is different than CVS or Subversion (before version 1.5), where the developer doing the merge has to figure out the best merge base for themselves. This makes merging a heck of a lot easier in Git than in these other systems.
 
 Insert 18333fig0317.png 
+Рисунок 3-17. Git автоматически создает новый объект коммита, который содержит работу по слиянию.
+
 Figure 3-17. Git automatically creates a new commit object that contains the merged work.
+
+Теперь когда ваша работа объединена, вам больше не требуется ветвь `iss53`. Вы можете удалить ее, а затем закрыть тикет в вашей tracking системе:
 
 Now that your work is merged in, you have no further need for the `iss53` branch. You can delete it and then manually close the ticket in your ticket-tracking system:
 
