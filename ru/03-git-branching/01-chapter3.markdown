@@ -5,22 +5,22 @@
 
 Nearly every VCS has some form of branching support. Branching means you diverge from the main line of development and continue to do work without messing with that main line. In many VCS tools, this is a somewhat expensive process, often requiring you to create a new copy of your source code directory, which can take a long time for large projects.
 
-Некоторые люди упоминают о модели ветвления в Git, как о "потрясающей функциии", и это безусловно выделяет Git в VCS сообществе. Чем она столь хороша? Способ ветвления в Git черезвычайно легковесен, что делает операции ветвления практически мгновенными и переключение туда сюда между ветвями в целом поистине быстрым. В отличие от многих других VCSs, Git поддерживает процесс работы, который ветвится и соединяется очень часто, даже по несколько раз в день. Понимание и владение этой функцией дает вам мощный уникальный инструмент и может буквально изменить ваш процесс разработки.
+Некоторые люди упоминают о модели ветвления в Git, как о "потрясающей функциии", и это безусловно выделяет Git в VCS сообществе. Чем она столь хороша? Способ ветвления в Git черезвычайно легковесен, что делает операции ветвления практически мгновенными и переключение туда сюда между ветвями в целом поистине быстрым. В отличие от многих других VCSs, Git вдохновляет процесс работы на частое создание веток и объединений, даже по несколько раз в день. Понимание и владение этой функцией дает вам мощный уникальный инструмент и может буквально изменить ваш процесс разработки.
 
 Some people refer to the branching model in Git as its “killer feature,” and it certainly sets Git apart in the VCS community. Why is it so special? The way Git branches is incredibly lightweight, making branching operations nearly instantaneous and switching back and forth between branches generally just as fast. Unlike many other VCSs, Git encourages a workflow that branches and merges often, even multiple times in a day. Understanding and mastering this feature gives you a powerful and unique tool and can literally change the way that you develop.
 
 ## Что такое Ветвь ##
 ## What a Branch Is ##
 
-Чтобы на самом деле разобраться в способбе ветвления в Git, мы должны сделать шаг назад и рассмотреть, как Git хранит свои данные. Как вы наверное помните из Главы 1, Git не хранит данные как последовательность изменений или отличий, а как последовательность слепков.
+Чтобы на самом деле разобраться в способбе ветвления в Git, мы должны сделать шаг назад и рассмотреть, как Git хранит свои данные. Как вы наверное помните из Главы 1, Git хранит данные не как последовательность изменений или отличий, а как последовательность слепков.
 
 To really understand the way Git does branching, we need to take a step back and examine how Git stores its data. As you may remember from Chapter 1, Git doesn’t store data as a series of changesets or deltas, but instead as a series of snapshots.
 
-Когда вы фиксируете изменения в Git, Git сохраняет фиксируемый объект, который соодержит указатель на слепок содержимого, подготовленного к коммит, метаданные автора и комментария и ноль или больше указателей на коммит или коммиты, которые были прямыми предками этого коммита: ноль предков для первого коммита, один - для обычного коммита и несколько - для коммита, происходящей в результате слияния двух или более веток.
+Когда вы фиксируете изменения в Git, Git сохраняет фиксируемый объект, который соодержит указатель на слепок содержимого, подготовленного к коммиту, метаданные автора и комментария и ноль или больше указателей на коммит или коммиты, которые были прямыми предками этого коммита: ноль предков для первого коммита, один - для обычного коммита и несколько - для коммита, происходящей в результате слияния двух или более веток.
 
 When you commit in Git, Git stores a commit object that contains a pointer to the snapshot of the content you staged, the author and message metadata, and zero or more pointers to the commit or commits that were the direct parents of this commit: zero parents for the first commit, one parent for a normal commit, and multiple parents for a commit that results from a merge of two or more branches.
 
-Чтобы представить это, давайте предположим, что у вас есть дирректория, содержащая три файла, и вы их все поготавливаете и фиксируете. При подготовке файлов вычисляется контрольная сумма для каждого (SHA-1 хэш мы упоминали в Главе 1), эта версия файла сохраняется в Git репозиторий (Git ссылается на них как на массив двоичных данных), и  эта контрольная сумма добавляется в область подготовленных файлов:
+Чтобы представить это, давайте предположим, что у вас есть дирректория, содержащая три файла, и вы их все подготавливаете и фиксируете. При подготовке файлов вычисляется контрольная сумма для каждого (SHA-1 хэш мы упоминали в Главе 1), эта версия файла сохраняется в Git репозиторий (Git ссылается на них как на массив двоичных данных), и  эта контрольная сумма добавляется в область подготовленных файлов:
 
 To visualize this, let’s assume that you have a directory containing three files, and you stage them all and commit. Staging the files checksums each one (the SHA-1 hash we mentioned in Chapter 1), stores that version of the file in the Git repository (Git refers to them as blobs), and adds that checksum to the staging area:
 
@@ -64,7 +64,7 @@ What happens if you create a new branch? Well, doing so creates a new pointer fo
 
 	$ git branch testing
 
-Эта команда создает указатель на ту же самый коммит, на котором вы сейчас находитесь (см. Рисунок 3-4).
+Эта команда создает указатель на тот же самый коммит, на котором вы сейчас находитесь (см. Рисунок 3-4).
 
 This creates a new pointer at the same commit you’re currently on (see Figure 3-4).
 
@@ -128,7 +128,7 @@ Insert 18333fig0308.png
 
 Figure 3-8. HEAD moves to another branch on a checkout.
 
-Эта команда выполнила два действия. Она передвинула указатель HEAD назад на ветвь master и вернула файлы в вашей рабочей директории назад, чтобы соответвствовать слепоку, на который указывает master. Это также означает, что изменения, которые вы делаете, начиная с этого момента, будут ответвляться от старой версии проекта. Это полностью откатывает временные изменения, которые вы сделали на ветви testing, так что вы можете двигаться в другом направлении.
+Эта команда выполнила два действия. Она передвинула указатель HEAD назад на ветвь master и вернула файлы в вашей рабочей директории назад, чтобы соответвствовать слепку, на который указывает master. Это также означает, что изменения, которые вы делаете, начиная с этого момента, будут ответвляться от старой версии проекта. Это полностью откатывает временные изменения, которые вы сделали на ветви testing, так что вы можете двигаться в другом направлении.
 
 That command did two things. It moved the HEAD pointer back to point to the master branch, and it reverted the files in your working directory back to the snapshot that master points to. This also means the changes you make from this point forward will diverge from an older version of the project. It essentially rewinds the work you’ve done in your testing branch temporarily so you can go in a different direction.
 
@@ -148,7 +148,7 @@ Insert 18333fig0309.png
 
 Figure 3-9. The branch histories have diverged.
 
-Из-за того, что ветвь в Git на самом деле является простым файлом, которые соодержит 40 символов результирующей суммы SHA-1 коммита, на который он указывает, создание и удаление ветвей практически беззатратно. Создание новой ветви настолько быстро и просто, насколько быстра и проста запись 41 байта в файл (40 символов + символ перехода на новую строку).
+Из-за того, что ветвь в Git на самом деле является простым файлом, который соодержит 40 символов результирующей суммы SHA-1 коммита, на который он указывает, создание и удаление ветвей практически беззатратно. Создание новой ветви настолько быстро и просто, насколько быстра и проста запись 41 байта в файл (40 символов + символ перехода на новую строку).
 
 Because a branch in Git is in actuality a simple file that contains the 40 character SHA-1 checksum of the commit it points to, branches are cheap to create and destroy. Creating a new branch is as quick and simple as writing 41 bytes to a file (40 characters and a newline).
 
@@ -239,7 +239,7 @@ Figure 3-12. The iss53 branch has moved forward with your work.
 
 Now you get the call that there is an issue with the web site, and you need to fix it immediately. With Git, you don’t have to deploy your fix along with the `iss53` changes you’ve made, and you don’t have to put a lot of effort into reverting those changes before you can work on applying your fix to what is in production. All you have to do is switch back to your master branch.
 
-Однако, прежде чем сделать это, учтите, что если в вашей рабочей дирректории или области подготовки к коммиту имеются незафиксированные изменения, которые конфликтуют с веткой, на которую вы переходите, Git не позволит переключить брэнчи. Лучше всего иметь чистое рабочее состояния, когда вы переключаете ветки. Существует несколько путей сделать это (а именно, временная фиксайия работы и правка коммита), которые мы рассмотрим позже. А на данный момент представим, что вы зафиксировали все изменения, и можете переключится обратно на ветку master:
+Однако, прежде чем сделать это, учтите, что если в вашей рабочей дирректории или области подготовки к коммиту имеются незафиксированные изменения, которые конфликтуют с веткой, на которую вы переходите, Git не позволит переключить брэнчи. Лучше всего иметь чистое рабочее состояния, когда вы переключаете ветки. Существует несколько путей сделать это (а именно, временная фиксация работы и правка коммита), которые мы рассмотрим позже. А на данный момент представим, что вы зафиксировали все изменения, и можете переключится обратно на ветку master:
 
 However, before you do that, note that if your working directory or staging area has uncommitted changes that conflict with the branch you’re checking out, Git won’t let you switch branches. It’s best to have a clean working state when you switch branches. There are ways to get around this (namely, stashing and commit amending) that we’ll cover later. For now, you’ve committed all your changes, so you can switch back to your master branch:
 
@@ -277,7 +277,7 @@ You can run your tests, make sure the hotfix is what you want, and merge it back
 	 README |    1 -
 	 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Наверное, вы заметили фразу "Fast forward" в этом мерже. Так как бранч, с которымй вы мержитесь, указывает на коммит, являющийся прямым потомком коммита, на котором вы находитесь, Git передвигает указатель вперед. Говоря иными словами, когда вы пытаетесь помержить один коммит с другим, который может быть достигнут путем следованя первичной истории коммитов, Git упрощает вещи перемещением указателя вперед, так как нету расходящихся изменений для слияния их воедино. Это называется "fast forward".
+Наверное, вы заметили фразу "Fast forward" в этом мерже. Так как бранч, с которымй вы мержитесь, указывает на коммит, являющийся прямым потомком коммита, на котором вы находитесь, Git передвигает указатель вперед. Говоря иными словами, когда вы пытаетесь объединить один коммит с другим, который может быть достигнут путем следованя первичной истории коммитов, Git упрощает вещи перемещением указателя вперед, так как нету расходящихся изменений для слияния их воедино. Это называется "fast forward".
 
 You’ll notice the phrase "Fast forward" in that merge. Because the commit pointed to by the branch you merged in was directly upstream of the commit you’re on, Git moves the pointer forward. To phrase that another way, when you try to merge one commit with a commit that can be reached by following the first commit’s history, Git simplifies things by moving the pointer forward because there is no divergent work to merge together — this is called a "fast forward".
 
@@ -317,8 +317,12 @@ Figure 3-15. Your iss53 branch can move forward independently.
 
 It’s worth noting here that the work you did in your `hotfix` branch is not contained in the files in your `iss53` branch. If you need to pull it in, you can merge your `master` branch into your `iss53` branch by running `git merge master`, or you can wait to integrate those changes until you decide to pull the `iss53` branch back into `master` later.
 
-### Основы мержа ###
+### Основы слияния ###
 ### Basic Merging ###
+
+Предположим, что вы решили, что работа над проблемой #53 закончена и ее нужно объединить с `master` веткой. Для того чтобы сделать это, вам нужно сделать слияние
+в ветке `iss53`, это похоже на то, как вы раньше делали слияние ветки `hotfix`. Все что вам нужно это перейти на ветку, которую вы хотите объединить, и выполнить
+команду `git merge`:
 
 Suppose you’ve decided that your issue #53 work is complete and ready to be merged into your `master` branch. In order to do that, you’ll merge in your `iss53` branch, much like you merged in your `hotfix` branch earlier. All you have to do is check out the branch you wish to merge into and then run the `git merge` command:
 
@@ -327,18 +331,35 @@ Suppose you’ve decided that your issue #53 work is complete and ready to be me
 	Merge made by recursive.
 	 README |    1 +
 	 1 files changed, 1 insertions(+), 0 deletions(-)
+	 
+Это немного отличается от слияния ветки `hotfix`, которое вы делали ранее. В этом случае ваша история разработки отклоняется от некой старой точки. Из-за того что ветвь, на которой вы находитесь не является прямым предком ветви, которую вы мержите, то Git должен выполнить некоторую работу. В этом случае Git выполняет
+простое трехуровневое слияние, используя для этого два снэпшота, указывающих на каждую из ветвей, и общего предка этих ветвей. На рисунке 3-16 выделены три
+снэпшота, которые Git использует для выполнения слияния в этом случае.
 
 This looks a bit different than the `hotfix` merge you did earlier. In this case, your development history has diverged from some older point. Because the commit on the branch you’re on isn’t a direct ancestor of the branch you’re merging in, Git has to do some work. In this case, Git does a simple three-way merge, using the two snapshots pointed to by the branch tips and the common ancestor of the two. Figure 3-16 highlights the three snapshots that Git uses to do its merge in this case.
 
 Insert 18333fig0316.png 
+Рисунок 3-16. Git автоматически определяет наиболее подходящего предка в качестве основы для слияния ветки.
+
 Figure 3-16. Git automatically identifies the best common-ancestor merge base for branch merging.
 
+Вместо того чтобы просто передвинуть указатель вперед, Git создает новый снэпшот, который является результатом трехуровнего слияния и создает автоматически новый
+коммит, указывающий на него (смотрите Рисунок 3-17). Кажется, что это обычное слияние, но особенность в том, что у него более одного предка.
+
 Instead of just moving the branch pointer forward, Git creates a new snapshot that results from this three-way merge and automatically creates a new commit that points to it (see Figure 3-17). This is referred to as a merge commit and is special in that it has more than one parent.
+
+Стоит отметить, что Git определяет наиболее подходящего предка, чтобы использовать его в качестве основы для слияния; это поведение отличается от CVS или
+Subversion (до версии 1.5), где разработчик, делая слияние, должен выяснить самостоятельно наиболее подходящего предка. Это делает слияние в Git чертовски
+более легким, чем в этих указанных системах.
 
 It’s worth pointing out that Git determines the best common ancestor to use for its merge base; this is different than CVS or Subversion (before version 1.5), where the developer doing the merge has to figure out the best merge base for themselves. This makes merging a heck of a lot easier in Git than in these other systems.
 
 Insert 18333fig0317.png 
+Рисунок 3-17. Git автоматически создает новый объект коммита, который содержит работу по слиянию.
+
 Figure 3-17. Git automatically creates a new commit object that contains the merged work.
+
+Теперь когда ваша работа объединена, вам больше не требуется ветвь `iss53`. Вы можете удалить ее, а затем закрыть тикет в вашей tracking системе:
 
 Now that your work is merged in, you have no further need for the `iss53` branch. You can delete it and then manually close the ticket in your ticket-tracking system:
 
