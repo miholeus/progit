@@ -365,14 +365,21 @@ Now that your work is merged in, you have no further need for the `iss53` branch
 
 	$ git branch -d iss53
 
-### Basic Merge Conflicts ###
+### Основные конфликты при слиянии ###
 
-Occasionally, this process doesn’t go smoothly. If you changed the same part of the same file differently in the two branches you’re merging together, Git won’t be able to merge them cleanly. If your fix for issue #53 modified the same part of a file as the `hotfix`, you’ll get a merge conflict that looks something like this:
+Иногда этот процесс не проходит гладко. Если вы поменяли одну и ту же часть одного файла разными способами в двух ветках, которые вы собираетесь мержить, Git
+не сможет сделать их чистое слияние. Если ваше исправление проблемы #53 изменило ту же часть файла, что и `hotfix`, вы получите конфликт слияния, которым выглядит
+подобным образом:
+
+Occasionally, this process doesn’t go smoothly. If you changed the same part of the same file differently in the two branches you’re merging together, Git won’t be able to merge them cleanly. If your fix for issue #53 modified the same part of a file as the hotfix, you’ll get a merge conflict that looks something like this:
 
 	$ git merge iss53
 	Auto-merging index.html
 	CONFLICT (content): Merge conflict in index.html
 	Automatic merge failed; fix conflicts and then commit the result.
+
+Git не создал автоматически новый коммит для мержа. Он приостановил процесс до тех пор, пока вы не разрешите конфликт. Если вы хотите увидеть какие файлы не
+были подвержены слиянию после конфликта, вы можете выполнить команду `git status`:
 
 Git hasn’t automatically created a new merge commit. It has paused the process while you resolve the conflict. If you want to see which files are unmerged at any point after a merge conflict, you can run `git status`:
 
@@ -386,6 +393,8 @@ Git hasn’t automatically created a new merge commit. It has paused the process
 	#	unmerged:   index.html
 	#
 
+Все что имеет конфликты слияния и не было разрешено перечислено как unmerged. Пше добавляет стандартные маркеры для разрешения конфликта к файлам, у которых наблюдается конфликт, так что вы можете вручную открыть эти файлы и убрать конфликты. Ваш файл содержит секцию, которая выглядить следующим образом:
+
 Anything that has merge conflicts and hasn’t been resolved is listed as unmerged. Git adds standard conflict-resolution markers to the files that have conflicts, so you can open them manually and resolve those conflicts. Your file contains a section that looks something like this:
 
 	<<<<<<< HEAD:index.html
@@ -396,11 +405,20 @@ Anything that has merge conflicts and hasn’t been resolved is listed as unmerg
 	</div>
 	>>>>>>> iss53:index.html
 
+Это значит, что версия в HEAD (ваша мастер ветка, так как на нее вы переключились когда выполнили команду слияния) находится в верхней части этого блока (все что выше `=======`), в то время как версия в ветке `iss53` находится в нижней. Для того чтобы исправить конфликт, вы должны выбрать одну из сторон или выполнить
+слияние контента самостоятельно. Например, вы можете разрешить этот конфликт заменой всего блока на следующее:
+
 This means the version in HEAD (your master branch, because that was what you had checked out when you ran your merge command) is the top part of that block (everything above the `=======`), while the version in your `iss53` branch looks like everything in the bottom part. In order to resolve the conflict, you have to either choose one side or the other or merge the contents yourself. For instance, you might resolve this conflict by replacing the entire block with this:
 
 	<div id="footer">
 	please contact us at email.support@github.com
 	</div>
+	
+Это решение содержит части каждой секции, и я полностью убрал строки `<<<<<<<`, `=======`, and `>>>>>>>`. После того как вы разрешите каждую из таких секций
+в каждом конфликтующем файле, запустите команду `git add` для каждого файла, чтобы пометить конфликт решенным. Подготавливание файла делает его разрешенным
+от конфликта в Git.
+Если вы хотите испоьзовать графический инструмент для разрешения проблем, вы можете выполнить команду `git mergetool`, которая запускает соответствующий визуальный
+инструмент для слияния и проводит вас сквозь конфликты:
 
 This resolution has a little of each section, and I’ve fully removed the `<<<<<<<`, `=======`, and `>>>>>>>` lines. After you’ve resolved each of these sections in each conflicted file, run `git add` on each file to mark it as resolved. Staging the file marks it as resolved in Git.
 If you want to use a graphical tool to resolve these issues, you can run `git mergetool`, which fires up an appropriate visual merge tool and walks you through the conflicts:
@@ -413,10 +431,19 @@ If you want to use a graphical tool to resolve these issues, you can run `git me
 	  {local}: modified
 	  {remote}: modified
 	Hit return to start merge resolution tool (opendiff):
+	
+Если вы хотите использовать инструмент для слияния отличный от того, который Git использует по-умолчанию (Git выбрал `opendiff` для меня, потому что я выполнил
+команду на Mac), то вы можете увидеть все поддерживаемые инструменты для слияния перечисленные после “merge tool candidates”. Наберите имя утилиты, которую бы вы
+хотели использовать. В главе 7 мы обсудим как мы можете изменить это стандартное значение для вашей среды.
 
 If you want to use a merge tool other than the default (Git chose `opendiff` for me in this case because I ran the command on a Mac), you can see all the supported tools listed at the top after “merge tool candidates”. Type the name of the tool you’d rather use. In Chapter 7, we’ll discuss how you can change this default value for your environment.
 
+После выхода из утилиты слияния, Git спросит вас, был ли мерж выполнен удачно. Если вы ответите положительно, он подготовит файл для отметки, что он был удачно
+вами разрешен.
+
 After you exit the merge tool, Git asks you if the merge was successful. If you tell the script that it was, it stages the file to mark it as resolved for you.
+
+Вы можете выполнить `git status` еще раз, чтобы убедиться, что все конфликты были разрешены:
 
 You can run `git status` again to verify that all conflicts have been resolved:
 
@@ -427,6 +454,9 @@ You can run `git status` again to verify that all conflicts have been resolved:
 	#
 	#	modified:   index.html
 	#
+	
+Если вы довольны этим, и вы подтверждаете, что все что имело конфликты теперь подготовлено для коммита, вы можете набрать `git commit`, чтобы завершить коммит.
+Стандартное сообщение при коммите выглядит следующим образом:
 
 If you’re happy with that, and you verify that everything that had conflicts has been staged, you can type `git commit` to finalize the merge commit. The commit message by default looks something like this:
 
@@ -440,12 +470,20 @@ If you’re happy with that, and you verify that everything that had conflicts h
 	# .git/MERGE_HEAD
 	# and try again.
 	#
+	
+Вы можете изменить сообщение, добавив детали о том как вы выполнили слияние, если вы вдруг решите, что эта информация может быть полезна для других, которые
+будут смотреть на этот мерж в будущем - почему и что вы сделали, если это не является очевидным.
 
 You can modify that message with details about how you resolved the merge if you think it would be helpful to others looking at this merge in the future — why you did what you did, if it’s not obvious.
 
-## Branch Management ##
+## Упрвление веткой ##
+
+Теперь когда вы создали, выполнили слияние, и удалили некоторые ветки, давайте взглянем на некоторые инструменты управления ветками, которые очень пригодятся, когда
+вы начнете постоянно пользоваться ветками.
 
 Now that you’ve created, merged, and deleted some branches, let’s look at some branch-management tools that will come in handy when you begin using branches all the time.
+
+Команда `git branch` делает больше, чем просто создает и удаляет ветки. Если вы запустите ее без аргументов, вы получите простой список ваших текущих веток:
 
 The `git branch` command does more than just create and delete branches. If you run it with no arguments, you get a simple listing of your current branches:
 
@@ -453,6 +491,10 @@ The `git branch` command does more than just create and delete branches. If you 
 	  iss53
 	* master
 	  testing
+	  
+Обратите внимание на символ `*`, который предшествует `master` ветке: он указывает на ветку, на которой вы в данный момент находитесь. Это значит, что если вы
+выполните коммит, то `master` ветка будет сдвинута вперед в вашей текущей работе. Чтобы увидеть последний коммит в каждой ветке, вы можете выполнить команду
+`git branch -v`:
 
 Notice the `*` character that prefixes the `master` branch: it indicates the branch that you currently have checked out. This means that if you commit at this point, the `master` branch will be moved forward with your new work. To see the last commit on each branch, you can run `git branch –v`:
 
@@ -460,19 +502,28 @@ Notice the `*` character that prefixes the `master` branch: it indicates the bra
 	  iss53   93b412c fix javascript issue
 	* master  7a98805 Merge branch 'iss53'
 	  testing 782fd34 add scott to the author list in the readmes
+	  
+Другая полезная опция для выяснения того, в каком состоянии находятся ваши ветки, это фильтрация списка веток, которые вы успели или не успели смержить с текущей веткой, на которой находитесь. Такие полезные опции как `--merged` и `--no-merged` доступны в Git начиная с версии 1.5.6 как раз для этой цели. Для того чтобы увидеть
+какие ветки уже слиты с текущей, вы можете выполнить команду `git branch --merged`:
 
 Another useful option to figure out what state your branches are in is to filter this list to branches that you have or have not yet merged into the branch you’re currently on. The useful `--merged` and `--no-merged` options have been available in Git since version 1.5.6 for this purpose. To see which branches are already merged into the branch you’re on, you can run `git branch –merged`:
 
 	$ git branch --merged
 	  iss53
 	* master
+	
+Так как вы уже выполнили ранее слияние ветки `iss53`, вы видите ее в вашем списке. Ветки без `*` спереди в этом списке можно спокойно удалить при помощи `git branch -d`; вы уже внесли работу в них в другую ветвь, так что вы ничего не потеряете.
 
 Because you already merged in `iss53` earlier, you see it in your list. Branches on this list without the `*` in front of them are generally fine to delete with `git branch -d`; you’ve already incorporated their work into another branch, so you’re not going to lose anything.
+
+Для того чтобы увидеть все ветви, которые содержат работу, еще не смерженную, вы можете выполнить команду `git branch --no-merged`:
 
 To see all the branches that contain work you haven’t yet merged in, you can run `git branch --no-merged`:
 
 	$ git branch --no-merged
 	  testing
+	  
+Вы увидите другую ветвь. Так как она содержит работу, которая не была еще смержена, попытка удалить ее при помощи `git branch -d` закончится неудачей:
 
 This shows your other branch. Because it contains work that isn’t merged in yet, trying to delete it with `git branch -d` will fail:
 
@@ -480,7 +531,11 @@ This shows your other branch. Because it contains work that isn’t merged in ye
 	error: The branch 'testing' is not an ancestor of your current HEAD.
 	If you are sure you want to delete it, run 'git branch -D testing'.
 
+Если вы действительно хотите удалить ветвь и потерять выполненную в ней работу, вы можете силой сделать это при помощи ключа `-D`, на что указывает сообщение с подсказкой.
+
 If you really do want to delete the branch and lose that work, you can force it with `-D`, as the helpful message points out.
+
+## Ветвление рабочего процесса ##
 
 ## Branching Workflows ##
 
